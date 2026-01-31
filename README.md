@@ -22,7 +22,7 @@ npm install
 npm start
 ```
 
-The backend listens on the port configured in `backend/app.js` or the `PORT` environment variable.
+The backend listens on the port configured in `backend/src/app.js` or the `PORT` environment variable.
 
 Frontend (Flutter)
 
