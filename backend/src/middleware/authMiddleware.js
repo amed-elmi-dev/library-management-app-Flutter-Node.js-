@@ -4,7 +4,6 @@ const User = require("../models/User");
 const protect = async (req, res, next) => {
   let token;
 
-  // Check token in headers
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
@@ -26,9 +25,9 @@ const protect = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({
-      message: "Not authorized, token failed",
+      message: "Not authorized, token invalid",
     });
   }
 };
 
-module.exports = protect;
+module.exports = { protect };
