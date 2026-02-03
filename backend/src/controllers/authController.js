@@ -6,6 +6,7 @@ const generateToken = require("../utils/generateToken");
 
 // REGISTER USER
 const registerUser = async (req, res) => {
+  console.log("REGISTER ROUTE HIT");
   try {
     const { name, email, password } = req.body;
 
