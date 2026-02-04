@@ -1,9 +1,23 @@
 const Book = require("../models/Book");
+const BookCopy = require("../models/BookCopy");
 
 // ADMIN: Add book
 const createBook = async (req, res) => {
   try {
-    const book = await Book.create(req.body);
+    const totalCopies = Math.max(1, Number(req.body.totalCopies || 1));
+    const book = await Book.create({
+      ...req.body,
+      totalCopies,
+      availableCopies: totalCopies,
+    });
+
+    const copies = Array.from({ length: totalCopies }, (_, index) => ({
+      book: book._id,
+      copyNumber: index + 1,
+      status: "available",
+    }));
+    await BookCopy.insertMany(copies);
+
     res.status(201).json(book);
   } catch (error) {
     res.status(400).json({ message: error.message });

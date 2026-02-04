@@ -1,38 +1,39 @@
-import 'package:flutter/material.dart';
+﻿import "package:flutter/material.dart";
+import "package:get/get.dart";
+import "package:shared_preferences/shared_preferences.dart";
+import "routes.dart";
+import "services/cache_service.dart";
+import "theme/app_theme.dart";
 
-void main() => runApp(const GApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheService.instance.init();
+  final prefs = await SharedPreferences.getInstance();
+  final themeSetting = prefs.getString("theme_mode") ?? "system";
+  final initialThemeMode = themeSetting == "dark"
+      ? ThemeMode.dark
+      : themeSetting == "light"
+          ? ThemeMode.light
+          : ThemeMode.system;
 
-class GApp extends StatelessWidget {
-  const GApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'G Library',
-      debugShowCheckedModeBanner: false,
-      home: const WelcomeScreen(),
-    );
-  }
+  runApp(LibraryApp(initialThemeMode: initialThemeMode));
 }
 
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class LibraryApp extends StatelessWidget {
+  const LibraryApp({super.key, required this.initialThemeMode});
+
+  final ThemeMode initialThemeMode;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.tealAccent.shade100,
-      body: const Center(
-        child: Text(
-          'Welcome to G Library',
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
+    return GetMaterialApp(
+      title: "Library Management",
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: initialThemeMode,
+      initialRoute: AppRoutes.splash,
+      getPages: AppPages.pages,
     );
   }
 }

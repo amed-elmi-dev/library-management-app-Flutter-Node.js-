@@ -27,12 +27,17 @@ const bookSchema = new mongoose.Schema(
       type: Number,
     },
 
+    totalCopies: {
+      type: Number,
+      default: 1,
+    },
+
     availableCopies: {
       type: Number,
       default: 1,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model("Book", bookSchema);
